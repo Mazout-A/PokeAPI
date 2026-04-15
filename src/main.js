@@ -80,7 +80,7 @@ function updateSprite() {
   }
 }
 
-// Btn changement en shiny
+// Btn shiny
 shinyBTN.addEventListener("click", () => {
   shiny = !shiny;
   updateSprite(); // Parenthèses ajoutées

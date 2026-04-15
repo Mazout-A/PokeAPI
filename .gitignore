@@ -18,14 +18,6 @@ dist-ssr
 .idea
 .DS_Store
 
-js/
-.baie.js
-.capacite.js
-.concour.js
-.lieu.js
-.objet.js
-.pokemon.js
-
 node_modules/
 dist/
 *.suo
