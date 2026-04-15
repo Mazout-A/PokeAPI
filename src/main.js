@@ -1,4 +1,6 @@
-const typeColoes = {
+import { fetchAllPokemon, fetchPokemonDetail } from "./js/pokemon.js";
+
+const typeColors = {
   normal: "#A8A878",
   fire: "#F08030",
   water: "#6890F0",
@@ -19,12 +21,13 @@ const typeColoes = {
   fairy: "#EE99AC",
 };
 
-// Variable
-let pokemonId = 1;
+// Variables
+let pokemonList = [];
+let currentIndex = 0; // Utilisation de l'index pour la navigation
 let shiny = false;
 let pokemonData = null;
 
-// Element html ciblé avec l'id
+// Éléments html ciblés avec l'id
 const container = document.getElementById("pokedex-app");
 const title = document.getElementById("title");
 const id = document.getElementById("poke-id");
@@ -33,3 +36,73 @@ const weight = document.getElementById("weight-val");
 const type = document.getElementById("type-name");
 const sprite = document.getElementById("main-sprite");
 const shinyBTN = document.getElementById("toggle-shiny");
+
+// Fonction démarrage
+async function initApp() {
+  title.textContent = "CHARGEMENT...";
+
+  pokemonList = await fetchAllPokemon();
+
+  chargerPokemon(currentIndex);
+}
+
+// Fonction récupération et affichage du pokemon
+async function chargerPokemon(index) {
+  title.textContent = "Chargement...";
+
+  const targetURL = pokemonList[index].url;
+
+  pokemonData = await fetchPokemonDetail(targetURL);
+
+  title.textContent = pokemonData.name;
+  id.textContent = `#${String(index + 1).padStart(4, "0")}`; // S majuscule à String
+  height.textContent = (pokemonData.height / 10).toFixed(1); // pokemonData bien orthographié
+  weight.textContent = (pokemonData.weight / 10).toFixed(1); // pokemonData bien orthographié
+
+  const typeName = pokemonData.types[0].type.name; // types avec un "s"
+  type.textContent = typeName;
+
+  if (typeColors[typeName]) {
+    container.style.backgroundColor = typeColors[typeName]; // backgroundColor
+  }
+
+  updateSprite();
+}
+
+// Fonction image normale et shiny
+function updateSprite() {
+  if (!pokemonData) return;
+
+  if (shiny) {
+    sprite.src = pokemonData.sprites.front_shiny;
+  } else {
+    sprite.src = pokemonData.sprites.other["official-artwork"].front_default; // sprite bien orthographié
+  }
+}
+
+// Btn changement en shiny
+shinyBTN.addEventListener("click", () => {
+  shiny = !shiny;
+  updateSprite(); // Parenthèses ajoutées
+});
+
+// Navigation clavier
+document.addEventListener("keydown", (event) => {
+  if (pokemonList.length === 0) return;
+
+  if (event.key === "ArrowUp" && currentIndex > 0) {
+    currentIndex--;
+    shiny = false;
+    chargerPokemon(currentIndex);
+  } else if (
+    event.key === "ArrowDown" &&
+    currentIndex < pokemonList.length - 1
+  ) {
+    currentIndex++;
+    shiny = false;
+    chargerPokemon(currentIndex);
+  }
+});
+
+// Lancement au démarrage
+initApp(); // Parenthèses ajoutées
