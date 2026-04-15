@@ -54,7 +54,8 @@ async function chargerPokemon(index) {
 
   pokemonData = await fetchPokemonDetail(targetURL);
 
-  title.textContent = pokemonData.name;
+  title.textContent =
+    pokemonData.name.charAT(0).toUpperCase() + pokemonData.name.slice(1);
   id.textContent = `#${String(index + 1).padStart(4, "0")}`; // S majuscule à String
   height.textContent = (pokemonData.height / 10).toFixed(1); // pokemonData bien orthographié
   weight.textContent = (pokemonData.weight / 10).toFixed(1); // pokemonData bien orthographié
