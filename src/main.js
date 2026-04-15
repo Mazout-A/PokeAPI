@@ -1,4 +1,8 @@
-import { fetchAllPokemon, fetchPokemonDetail } from "./js/pokemon.js";
+import {
+  fetchAllPokemon,
+  fetchPokemonDetail,
+  eveloutionChain,
+} from "./js/pokemon.js";
 
 const typeColors = {
   normal: "#A8A878",
@@ -69,6 +73,7 @@ async function chargerPokemon(index) {
   }
 
   updateSprite();
+  evolutionPokemon(pokemonData.id);
 }
 
 // Fonction image normale et shiny
@@ -106,6 +111,7 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+// function pour avoir le pokedex complet sur le coté
 function pokemonDex() {
   const dex = document.getElementById("pokemon-list");
   dex.innerHTML = "";
@@ -123,6 +129,38 @@ function pokemonDex() {
     });
 
     dex.appendChild(item);
+  });
+}
+
+// function evolution pokemon
+async function evolutionPokemon(pokemonId) {
+  const evoChain = document.getElementById("evo-chain");
+  evoChain.innerHTML = "";
+
+  const evolution = await eveloutionChain(pokemonId);
+
+  evolution.forEach((name, index) => {
+    if (index > 0) {
+      const arrow = document.createElement("span");
+      arrow.textContent = "-";
+      arrow.className = "text-white";
+      evoChain.appendChild(arrow);
+    }
+
+    const evoItem = document.createElement("div");
+    evoItem.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+    evoItem.className =
+      "text-xs text-white font-bold bg-black/30 px-2 py-1 rounded-lg cursor-pointer hover:bg-black/50 transition-colors";
+
+    evoItem.addEventListener("click", () => {
+      const foundIndex = pokemonList.findIndex((p) => p.name === name);
+      if (foundIndex !== -1) {
+        currentIndex = foundIndex;
+        shiny = false;
+        chargerPokemon(currentIndex);
+      }
+    });
+    evoChain.appendChild(evoItem);
   });
 }
 
