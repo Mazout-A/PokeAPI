@@ -6,9 +6,61 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PokeAPI</title>
+  <link rel="stylesheet" href="/src/style.css">
 </head>
 
 <body>
+  <section id="pokedex-app"
+    class="min-h-screen flex items-center justify-center p-4 transition-colors duration-500 bg-gray-200">
+
+    <div
+      class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6 p-8 rounded-3xl border-[12px] border-gray-900 shadow-2xl relative overflow-hidden">
+
+      <article class="bg-black/30 rounded-2xl p-6 flex flex-col text-white font-mono shadow-inner">
+        <h2 class="text-xs uppercase opacity-70 mb-1">Données</h2>
+        <div id="stats-display" class="space-y-4">
+          <p class="text-sm">Taill : <span id="height-val">--</span> m</p>
+          <p class="text-sm">Poids : <span id="weight-val">--</span> kg</p>
+          <p class="text-sm">Type : <span id="type-name" class="font-bold uppercase">--</span></p>
+        </div>
+
+        <div class="mt-auto pt-6 border-t border-white/20">
+          <p class="text-[10px] leading-tight opacity-60">Navigation</p>
+        </div>
+      </article>
+
+      <div class="flex flex-col items-center space-y-6">
+        <div
+          class="relative w-full aspect-square bg-slate-100 rounded-xl border-4 border-gray-700 flex items-center justify-center shadow-inner group">
+          <img id="main-sprite" src="" alt="Pokemon Sprite"
+            class="w-4/5 h-4/5 object-contain pixelated transition-transform group-hover:scale-110">
+
+          <button id="toggle-shiny"
+            class="absolute bottom-3 right-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-[10px] font-black px-3 py-1 rounded-full uppercase shadow-md transition-all active:scale-90">
+            Shiny
+          </button>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-2 w-full">
+          <div id="evo-chain" class="flex gap-2">
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-yellow-50/90 rounded-2xl p-6 border-4 border-gray-700 shadow-lg flex flex-col h-[500px]">
+        <div class="mb-4">
+          <span id="poke-id" class="text-gray-500 font-bold">#0001</span>
+          <h1 id="title" class="text-3xl font-black uppercase text-gray-800 leading-none">Chargement...</h1>
+        </div>
+
+        <div class="flex-1 overflow-y-auto pr-2 space-y-2 custom-scrollbar">
+          <div id="navigation-hint" class="text-[10px] uppercase text-gray-400 font-bold mb-2">Navigation Clavier</div>
+          <div id="pokemon-list" class="space-y-1"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
 </body>
 
