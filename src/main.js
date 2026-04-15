@@ -44,6 +44,8 @@ async function initApp() {
   pokemonList = await fetchAllPokemon();
 
   chargerPokemon(currentIndex);
+
+  pokemonDex();
 }
 
 // Fonction récupération et affichage du pokemon
@@ -55,16 +57,15 @@ async function chargerPokemon(index) {
   pokemonData = await fetchPokemonDetail(targetURL);
 
   title.textContent =
-    pokemonData.name.charAT(0).toUpperCase() + pokemonData.name.slice(1);
-  id.textContent = `#${String(index + 1).padStart(4, "0")}`; // S majuscule à String
-  height.textContent = (pokemonData.height / 10).toFixed(1); // pokemonData bien orthographié
-  weight.textContent = (pokemonData.weight / 10).toFixed(1); // pokemonData bien orthographié
+    pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
+  id.textContent = `#${String(index + 1).padStart(4, "0")}`;
+  height.textContent = (pokemonData.height / 10).toFixed(1);
 
-  const typeName = pokemonData.types[0].type.name; // types avec un "s"
+  const typeName = pokemonData.types[0].type.name;
   type.textContent = typeName;
 
   if (typeColors[typeName]) {
-    container.style.backgroundColor = typeColors[typeName]; // backgroundColor
+    container.style.backgroundColor = typeColors[typeName];
   }
 
   updateSprite();
@@ -77,14 +78,14 @@ function updateSprite() {
   if (shiny) {
     sprite.src = pokemonData.sprites.front_shiny;
   } else {
-    sprite.src = pokemonData.sprites.other["official-artwork"].front_default; // sprite bien orthographié
+    sprite.src = pokemonData.sprites.other["official-artwork"].front_default;
   }
 }
 
 // Btn shiny
 shinyBTN.addEventListener("click", () => {
   shiny = !shiny;
-  updateSprite(); // Parenthèses ajoutées
+  updateSprite();
 });
 
 // Navigation clavier
@@ -105,5 +106,25 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+function pokemonDex() {
+  const dex = document.getElementById("pokemon-list");
+  dex.innerHTML = "";
+
+  pokemonList.forEach((pokemon, index) => {
+    const item = document.createElement("div");
+    item.textContent = `#${String(index + 1).padStart(4, "0")} ${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}`;
+    item.className =
+      "cursor-pointer text-sm px-2 py-1 rounded hover:bg-black/10 transition-colors";
+
+    item.addEventListener("click", () => {
+      currentIndex = index;
+      shiny = false;
+      chargerPokemon(currentIndex);
+    });
+
+    dex.appendChild(item);
+  });
+}
+
 // Lancement au démarrage
-initApp(); // Parenthèses ajoutées
+initApp();
